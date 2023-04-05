@@ -42,7 +42,9 @@ module DangerPackwerk
       repo_link = github.pr_json[:base][:repo][:html_url]
       org_name = github.pr_json[:base][:repo][:owner][:login]
 
-      changed_package_todo_ymls = (git.modified_files + git.added_files + git.deleted_files).grep(PACKAGE_TODO_PATTERN)
+      changed_package_todo_ymls = (git.modified_files + git.added_files + git.deleted_files).grep(PACKAGE_TODO_PATTERN).map do |file|
+        file.tr('server/', '')
+      end
 
       violation_diff = get_violation_diff(violation_types)
 
@@ -183,7 +185,7 @@ module DangerPackwerk
       if package_todo_yml_file_copy
         File.write(package_todo_yml_file, package_todo_yml_file_copy)
       else
-        File.delete(package_todo_yml_file)
+        File.delete(package_todo_yml_file.gsub('server/', ''))
       end
     end
   end

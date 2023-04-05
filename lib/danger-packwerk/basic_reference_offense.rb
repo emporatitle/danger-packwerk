@@ -43,7 +43,7 @@ module DangerPackwerk
 
     sig { params(package_todo_yml: String).returns(T::Array[BasicReferenceOffense]) }
     def self.from(package_todo_yml)
-      package_todo_yml_pathname = Pathname.new(package_todo_yml)
+      package_todo_yml_pathname = Pathname.new(package_todo_yml.gsub('server/', ''))
 
       from_package = ParsePackwerk.package_from_path(package_todo_yml_pathname)
       from_package_name = from_package.name
